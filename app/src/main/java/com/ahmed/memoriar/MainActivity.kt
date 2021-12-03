@@ -26,5 +26,6 @@ class MainActivity : AppCompatActivity() {
         rvBoard.adapter = MemoryBoardAdapter(this, 8)
         rvBoard.setHasFixedSize(true)
         rvBoard.layoutManager = GridLayoutManager(this,2)
+
     }
 }
