@@ -8,6 +8,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.memoriar.models.BoardSize
+import com.ahmed.memoriar.models.MemoryCard
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,8 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         val chosenImages = DEFAULT_ICONS.shuffled().take(boardSize.getNumPairs())
         val randomizedImages = (chosenImages + chosenImages).shuffled()
+        val memoryCards = randomizedImages.map { MemoryCard(it) }
 
-        rvBoard.adapter = MemoryBoardAdapter(this, boardSize, randomizedImages)
+        rvBoard.adapter = MemoryBoardAdapter(this, boardSize, memoryCards)
         rvBoard.setHasFixedSize(true)
         rvBoard.layoutManager = GridLayoutManager(this,boardSize.getWidth())
 
