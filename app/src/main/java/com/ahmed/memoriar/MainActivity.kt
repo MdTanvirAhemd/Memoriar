@@ -1,13 +1,11 @@
 package com.ahmed.memoriar
 
-import DEFAULT_ICONS
 import EXTRA_BOARD_SIZE
 import EXTRA_GAME_NAME
 import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,11 +21,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ahmed.memoriar.creation.CreateActivity
 import com.ahmed.memoriar.models.BoardSize
 import com.ahmed.memoriar.models.MemoryCard
 import com.ahmed.memoriar.models.MemoryGame
 import com.ahmed.memoriar.models.UserImageList
-import com.ahmed.mymemory.creation.CreateActivity
 import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.ktx.analytics
