@@ -16,6 +16,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,12 +63,14 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
     clRoot = findViewById(R.id.clRoot)
     rvBoard = findViewById(R.id.rvBoard)
     tvNumMoves = findViewById(R.id.tvNumMoves)
     tvNumPairs = findViewById(R.id.tvNumPairs)
 
-    remoteConfig.setDefaultsAsync(mapOf("about_link" to "https://www.youtube.com/rpandey1234", "scaled_height" to 250L, "compress_quality" to 60L))
+    remoteConfig.setDefaultsAsync(mapOf("about_link" to "https://play.google.com/store/apps/developer?id=Md.Tanvir+Ahmed", "scaled_height" to 250L, "compress_quality" to 60L))
     remoteConfig.fetchAndActivate()
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
