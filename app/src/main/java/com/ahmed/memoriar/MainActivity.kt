@@ -29,6 +29,13 @@ import com.ahmed.memoriar.models.UserImageList
 import com.ahmed.memoriar.utils.EXTRA_BOARD_SIZE
 import com.ahmed.memoriar.utils.EXTRA_GAME_NAME
 import com.github.jinatonic.confetti.CommonConfetti
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -50,6 +57,9 @@ class MainActivity : AppCompatActivity() {
   private lateinit var rvBoard: RecyclerView
   private lateinit var tvNumMoves: TextView
   private lateinit var tvNumPairs: TextView
+//  private lateinit var mAdView : AdView
+  private var mInterstitialAd: InterstitialAd? = null
+//  private final var TAG = 'MainActivity'
 
   private val db = Firebase.firestore
   private val firebaseAnalytics = Firebase.analytics
@@ -64,6 +74,24 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    MobileAds.initialize(this) {}
+
+//    mAdView = findViewById(R.id.adView)
+//    val adRequest = AdRequest.Builder().build()
+//    mAdView.loadAd(adRequest)
+    var adRequest = AdRequest.Builder().build()
+
+    InterstitialAd.load(this,"ca-app-pub-3728622144665428/5767686677", adRequest, object : InterstitialAdLoadCallback() {
+      override fun onAdFailedToLoad(adError: LoadAdError) {
+        Log.d(TAG, adError?.message)
+        mInterstitialAd = null
+      }
+
+      override fun onAdLoaded(interstitialAd: InterstitialAd) {
+        Log.d(TAG, "Ad was loaded.")
+        mInterstitialAd = interstitialAd
+      }
+    })
 
     clRoot = findViewById(R.id.clRoot)
     rvBoard = findViewById(R.id.rvBoard)
@@ -257,7 +285,17 @@ class MainActivity : AppCompatActivity() {
   private fun updateGameWithFlip(position: Int) {
     // Error handling:
     if (memoryGame.haveWonGame()) {
+      if (mInterstitialAd != null) {
+        mInterstitialAd?.show(this)
+        Log.d("TAG", "The interstitial ad was shown.")
+
+      } else {
+        Log.d("TAG", "The interstitial ad wasn't ready yet.")
+      }
       Snackbar.make(clRoot, "You already won! Use the menu to play again.", Snackbar.LENGTH_LONG).show()
+
+
+
       return
     }
     if (memoryGame.isCardFaceUp(position)) {
@@ -276,6 +314,15 @@ class MainActivity : AppCompatActivity() {
       tvNumPairs.setTextColor(color)
       tvNumPairs.text = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
       if (memoryGame.haveWonGame()) {
+
+        if (mInterstitialAd != null) {
+          mInterstitialAd?.show(this)
+          Log.d("TAG", "The interstitial ad was shown.")
+
+        } else {
+          Log.d("TAG", "The interstitial ad wasn't ready yet.")
+        }
+
         Snackbar.make(clRoot, "You won! Congratulations.", Snackbar.LENGTH_LONG).show()
         CommonConfetti.rainingConfetti(clRoot, intArrayOf(Color.YELLOW, Color.GREEN, Color.MAGENTA)).oneShot()
         firebaseAnalytics.logEvent("won_game") {
